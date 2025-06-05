@@ -1,0 +1,19 @@
+/* src/components/ThemeToggler.css */
+.theme-toggler {
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary-color);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-toggler:hover {
+  background-color: var(--kpi-card-bg);
+  color: var(--text-primary-color);
+}

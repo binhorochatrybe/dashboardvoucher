@@ -1,0 +1,99 @@
+/* src/components/VouchersTable.css */
+
+.table-container {
+  /* Estilo de card, igual aos outros gráficos */
+  background-color: var(--card-background-color);
+  padding: 1.5rem;
+  border-radius: var(--card-border-radius);
+  box-shadow: 0 4px 12px var(--shadow-color);
+  grid-column: 1 / -1; /* Faz a seção ocupar a largura toda */
+}
+
+.table-container h3 {
+  color: var(--text-secondary-color);
+  font-size: 1.1rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Wrapper para permitir rolagem horizontal em telas pequenas */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse; /* Remove o espaço entre as células */
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+thead tr {
+  background-color: #f8f9fa; /* Um fundo leve para o cabeçalho */
+}
+
+th, td {
+  padding: 12px 15px;
+  border-bottom: 1px solid var(--border-color); /* Linhas entre as linhas de dados */
+}
+
+th {
+  font-weight: 600;
+  color: var(--text-primary-color);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+}
+
+tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+  background-color: #f1f3f5; /* Efeito de hover para destacar a linha */
+}
+
+tbody tr:last-child td {
+  border-bottom: none; /* Remove a borda da última linha */
+}
+
+/* Adicione isto ao final de VouchersTable.css */
+
+.pagination-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+  gap: 1rem;
+}
+
+.pagination-controls span {
+  font-size: 0.9rem;
+  color: var(--text-secondary-color);
+}
+
+.pagination-controls button {
+  background-color: #fff;
+  color: var(--text-primary-color);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+  background-color: #f8f9fa;
+  border-color: #cdd1d4;
+}
+
+.pagination-controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

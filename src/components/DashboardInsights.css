@@ -36,16 +36,12 @@
   grid-column: 1 / -1;
 }
 
-
-/* --- ESTILO DOS CARDS DE GRÁFICO (SEÇÕES) ---
-  Este estilo não muda. Continua a aplicar o visual de "card"
-  a cada uma das suas seções de gráfico.
-*/
 .dashboard-container section {
   background-color: var(--card-background-color);
   padding: 1.5rem;
   border-radius: var(--card-border-radius);
   box-shadow: 0 4px 12px var(--shadow-color);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  display: flex; 
+  display: flex;
+  flex-direction: column; /* <-- ADICIONE ESTA LINHA */
 }

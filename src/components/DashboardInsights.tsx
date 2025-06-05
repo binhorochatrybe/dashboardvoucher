@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
-import { ref, get } from "firebase/database";
+import { ref, onValue } from "firebase/database";
 import { database, auth } from '../firebaseConfig';
 import { signOut } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -9,6 +9,7 @@ import {
   LineChart, Line, PieChart, Pie, Cell
 } from 'recharts';
 import './DashboardInsights.css';
+import VouchersTable from './VouchersTable';
 
 interface VoucherData {
   id: string;
@@ -35,37 +36,74 @@ function DashboardInsights() {
   const [user, loadingAuth, authError] = useAuthState(auth);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const dbRef = ref(database, 'vouchers');
-        const snapshot = await get(dbRef);
+  setLoadingData(true);
+  const dbRef = ref(database, 'vouchers');
 
-        if (snapshot.exists()) {
-          const rawData = snapshot.val();
-          const formattedData: VoucherData[] = Object.keys(rawData).map(key => ({
-            id: key,
-            ...rawData[key]
-          }));
-          setData(formattedData);
-        } else {
-          console.log("Nenhum dado encontrado.");
-        }
-      } catch (err: any) {
-        setError(`Falha ao carregar dados: ${err.message}`);
-        console.error(err);
-      } finally {
-        setLoadingData(false);
-      }
-    };
+  const unsubscribe = onValue(dbRef, (snapshot) => {
+    if (snapshot.exists()) {
+      const rawData = snapshot.val();
+      const formattedData: VoucherData[] = Object.keys(rawData).map(key => ({
+        id: key,
+        ...rawData[key]
+      }));
+      setData(formattedData);
+    } else {
+      console.log("Nenhum dado encontrado.");
+      setData([]); // Limpa os dados se o nó estiver vazio
+    }
+    setLoadingData(false);
+  }, 
+  (error) => {
 
-    fetchData();
-  }, []);
+    setError(`Falha ao carregar dados em tempo real: ${error.message}`);
+    console.error(error);
+    setLoadingData(false);
+  });
+
+  return () => {
+    unsubscribe();
+  };
+}, []); 
 
   const vouchersToday = useMemo(() => {
     if (!data.length) return 0;
     const todayString = new Date().toLocaleDateString('pt-BR');
     return data.filter(item => item.date.startsWith(todayString)).length;
   }, [data]);
+
+  // Em src/components/DashboardInsights.tsx
+
+const sortedData = useMemo(() => {
+  // Cria uma cópia para não alterar o estado original dos dados
+  const dataCopy = [...data];
+  
+  // Função para converter a string de data "dd/mm/aaaa, HH:MM:SS" em um objeto Date
+  const parseDate = (dateString: string) => {
+    // Verifica se a string tem o formato esperado
+    if (!dateString || !dateString.includes(',')) {
+      return new Date(0); // Retorna uma data mínima para itens mal formatados
+    }
+    const [datePart, timePart] = dateString.split(', ');
+    const [day, month, year] = datePart.split('/').map(Number);
+    const [hours, minutes, seconds] = timePart.split(':').map(Number);
+    
+    // Ano, Mês (0-11), Dia, Hora, Minuto, Segundo
+    return new Date(year, month - 1, day, hours, minutes, seconds);
+  };
+
+  // Ordena a cópia
+  dataCopy.sort((a, b) => {
+    const dateA = parseDate(a.date);
+    const dateB = parseDate(b.date);
+
+    // LÓGICA DE ORDENAÇÃO CORRIGIDA:
+    // Subtrai o tempo de B pelo de A.
+    // Se B for mais recente, o resultado é positivo, colocando B antes de A.
+    return dateB.getTime() - dateA.getTime();
+  });
+
+  return dataCopy;
+}, [data]);
 
   const uniqueUsers = useMemo(() => {
     if (!data.length) return 0;
@@ -198,6 +236,7 @@ function DashboardInsights() {
           </PieChart>
         </ResponsiveContainer>
       </section>
+      <VouchersTable data={sortedData} />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 
 import { type User } from 'firebase/auth';
 import './DashboardHeader.css';
+import ThemeToggler from './ThemeToggler';
 
 const TicketIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -58,6 +59,7 @@ function DashboardHeader({ user, totalVouchers, vouchersToday, uniqueUsers, onLo
       </div>
 
       <div className="header-user-menu">
+        <ThemeToggler />
         <img 
           src={user?.photoURL || `https://ui-avatars.com/api/?name=${displayName}&background=random`} 
           alt="Foto do perfil" 
