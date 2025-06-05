@@ -108,7 +108,7 @@
 }
 
 .logout-button {
-  background-color: #f8f9fa;
+  background-color: var(--kpi-card-bg);
   color: var(--text-secondary-color);
   border: 1px solid var(--border-color);
   padding: 0.5rem 1rem;

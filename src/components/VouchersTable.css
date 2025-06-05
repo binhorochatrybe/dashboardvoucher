@@ -78,7 +78,7 @@ tbody tr:last-child td {
 }
 
 .pagination-controls button {
-  background-color: #fff;
+  background-color: var(--kpi-card-bg);
   color: var(--text-primary-color);
   border: 1px solid var(--border-color);
   padding: 0.5rem 1rem;
@@ -89,7 +89,7 @@ tbody tr:last-child td {
 }
 
 .pagination-controls button:hover:not(:disabled) {
-  background-color: #f8f9fa;
+  background-color: var(--kpi-card-bg);
   border-color: #cdd1d4;
 }
 
