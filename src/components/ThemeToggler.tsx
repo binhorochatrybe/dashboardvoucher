@@ -1,6 +1,5 @@
 // src/components/ThemeToggler.tsx
 
-import React from 'react';
 import { useTheme } from '../context/ThemeContext';
 import './ThemeToggler.css';
 

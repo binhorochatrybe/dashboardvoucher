@@ -58,7 +58,7 @@ function VouchersTable({ data }: VouchersTableProps) {
           </thead>
           <tbody>
 
-            {currentItems.map((voucher, index) => (
+            {currentItems.map((voucher, __index) => (
               <tr key={`<span class="math-inline">\{voucher\.voucher\_id\}\-</span>{index}`}> {/* Usar uma chave mais única */}
                 <td>{voucher.date}</td>
                 <td>{voucher.name}</td>
