@@ -1,0 +1,117 @@
+/* LoginPage.css (versão final e completa) */
+
+/* --- VARIÁVEIS GLOBAIS --- */
+:root {
+  --background-color: #f0f2f5;
+  --card-background-color: #ffffff;
+  --text-primary-color: #1a202c;
+  --text-secondary-color: #4a5568;
+  --shadow-color: rgba(0, 0, 0, 0.08);
+  --card-border-radius: 12px;
+  --google-button-bg: #ffffff; /* Fundo branco para o botão do Google é mais padrão */
+  --google-button-hover-bg: #f8f9fa; /* Um cinza muito claro para o hover */
+  --google-button-border: #dadce0;
+}
+
+/* --- WRAPPER DA PÁGINA (SOLUÇÃO DA CENTRALIZAÇÃO) ---
+  Este novo container ocupa toda a tela e usa flexbox para 
+  centralizar perfeitamente seu filho, o '.login-container'.
+*/
+.login-page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--background-color);
+  padding: 1rem; /* Espaçamento para telas pequenas */
+  box-sizing: border-box; /* Garante que o padding não cause overflow */
+}
+
+/* --- CAIXA DE LOGIN (O "CARD") --- */
+.login-container {
+  background-color: var(--card-background-color);
+  padding: 2.5rem 3rem;
+  border-radius: var(--card-border-radius);
+  box-shadow: 0 4px 12px var(--shadow-color);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  animation: fadeIn 0.5s ease-in-out;
+  border: 1px solid var(--google-button-border); /* Borda sutil */
+}
+
+/* --- TIPOGRAFIA --- */
+.login-container h1 {
+  color: var(--text-primary-color);
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+.login-container p {
+  color: var(--text-secondary-color);
+  margin: 0 0 2rem 0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* --- BOTÃO DE LOGIN COM LOGO --- */
+.login-button {
+  background-color: var(--google-button-bg);
+  color: var(--text-secondary-color); /* Texto escuro para contraste com fundo branco */
+  border: 1px solid var(--google-button-border);
+  padding: 10px 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease, box-shadow 0.2s ease;
+  
+  /* Flexbox para alinhar o logo e o texto DENTRO do botão */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px; /* Espaço entre o logo e o texto */
+}
+
+/* --- EFEITO INTERATIVO DO BOTÃO --- */
+.login-button:hover {
+  background-color: var(--google-button-hover-bg);
+  border-color: #cdd1d4;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.login-button:active {
+  background-color: #f0f2f5;
+}
+
+/* Opcional: Estilo para o span dentro do botão, se necessário */
+.login-button span {
+  line-height: 1; /* Alinha o texto verticalmente de forma mais precisa */
+}
+
+
+/* --- ANIMAÇÃO DE ENTRADA --- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- RESPONSIVIDADE PARA TELEMÓVEIS --- */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 2rem 1.5rem;
+  }
+  .login-container h1 {
+    font-size: 1.5rem;
+  }
+}

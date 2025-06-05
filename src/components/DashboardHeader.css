@@ -1,0 +1,146 @@
+/* src/components/DashboardHeader.css (Com o ajuste de altura) */
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  /* MUDANÇA 1: Alinhando os itens ao topo do container maior */
+  align-items: flex-start; 
+  /* MUDANÇA 2: Aumentando o padding vertical (top/bottom) para dar mais altura */
+  padding: 3rem 2rem; 
+  background-color: var(--card-background-color);
+  border-bottom: 1px solid var(--border-color);
+  width: 100%;
+  box-sizing: border-box;
+  flex-wrap: wrap; 
+  gap: 1.5rem;
+}
+
+/* --- Saudação --- */
+.header-greeting {
+  flex: 1;
+  min-width: 250px; 
+}
+
+.header-greeting h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--text-primary-color);
+  margin: 0;
+}
+
+.header-greeting p {
+  font-size: 1rem;
+  color: var(--text-secondary-color);
+  margin: 0.25rem 0 0 0;
+}
+
+/* --- KPIs (Indicadores) --- */
+.header-kpis {
+  display: flex;
+  gap: 1rem;
+}
+
+.kpi-card {
+  display: flex;
+  align-items: center;
+  background-color: #f8f9fa; 
+  padding: 0.75rem 1rem;
+  border-radius: var(--card-border-radius);
+  border: 1px solid var(--border-color);
+  min-width: 150px;
+}
+
+.kpi-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+}
+.kpi-icon svg {
+  width: 20px;
+  height: 20px;
+  color: #fff;
+}
+.kpi-icon.total { background-color: #4f46e5; }
+.kpi-icon.today { background-color: #10b981; }
+.kpi-icon.users { background-color: #f59e0b; }
+
+
+.kpi-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.kpi-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary-color);
+  line-height: 1;
+}
+
+.kpi-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary-color);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* --- Menu do Utilizador --- */
+.header-user-menu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  object-fit: cover;
+}
+
+.logout-button {
+  background-color: #f8f9fa;
+  color: var(--text-secondary-color);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color: var(--border-color);
+  color: var(--text-primary-color);
+}
+
+
+/* --- Responsividade --- */
+@media (max-width: 1200px) {
+  .header-kpis {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+  }
+  .header-greeting {
+    order: 1;
+  }
+  .header-user-menu {
+    order: 2;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .kpi-card {
+    flex-grow: 1;
+  }
+}
