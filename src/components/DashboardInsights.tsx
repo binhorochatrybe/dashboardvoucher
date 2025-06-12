@@ -36,34 +36,31 @@ function DashboardInsights() {
   const [user, loadingAuth, authError] = useAuthState(auth);
 
   useEffect(() => {
-  setLoadingData(true);
-  const dbRef = ref(database, 'vouchers');
+    setLoadingData(true);
+    const dbRef = ref(database, 'vouchers');
 
-  const unsubscribe = onValue(dbRef, (snapshot) => {
-    if (snapshot.exists()) {
-      const rawData = snapshot.val();
-      const formattedData: VoucherData[] = Object.keys(rawData).map(key => ({
-        id: key,
-        ...rawData[key]
-      }));
-      setData(formattedData);
-    } else {
-      console.log("Nenhum dado encontrado.");
-      setData([]); // Limpa os dados se o nó estiver vazio
-    }
-    setLoadingData(false);
-  }, 
-  (error) => {
+    const unsubscribe = onValue(dbRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const rawData = snapshot.val();
+        const formattedData: VoucherData[] = Object.keys(rawData).map(key => ({
+          id: key,
+          ...rawData[key]
+        }));
+        setData(formattedData);
+      } else {
+        setData([]);
+      }
+      setLoadingData(false);
+    }, 
+    (error) => {
+      setError(`Falha ao carregar dados em tempo real: ${error.message}`);
+      setLoadingData(false);
+    });
 
-    setError(`Falha ao carregar dados em tempo real: ${error.message}`);
-    console.error(error);
-    setLoadingData(false);
-  });
-
-  return () => {
-    unsubscribe();
-  };
-}, []); 
+    return () => {
+      unsubscribe();
+    };
+  }, []); 
 
   const vouchersToday = useMemo(() => {
     if (!data.length) return 0;
@@ -71,39 +68,36 @@ function DashboardInsights() {
     return data.filter(item => item.date.startsWith(todayString)).length;
   }, [data]);
 
-  // Em src/components/DashboardInsights.tsx
+  const sortedData = useMemo(() => {
+    const dataCopy = [...data];
 
-const sortedData = useMemo(() => {
-  // Cria uma cópia para não alterar o estado original dos dados
-  const dataCopy = [...data];
-  
-  // Função para converter a string de data "dd/mm/aaaa, HH:MM:SS" em um objeto Date
-  const parseDate = (dateString: string) => {
-    // Verifica se a string tem o formato esperado
-    if (!dateString || !dateString.includes(',')) {
-      return new Date(0); // Retorna uma data mínima para itens mal formatados
-    }
-    const [datePart, timePart] = dateString.split(', ');
-    const [day, month, year] = datePart.split('/').map(Number);
-    const [hours, minutes, seconds] = timePart.split(':').map(Number);
-    
-    // Ano, Mês (0-11), Dia, Hora, Minuto, Segundo
-    return new Date(year, month - 1, day, hours, minutes, seconds);
-  };
+    const parseUniversalDate = (dateString: string): Date => {
+      if (typeof dateString === 'string' && /^\d{2}\/\d{2}\/\d{4}/.test(dateString)) {
+        const dateParts = dateString.split(',');
+        const [day, month, year] = dateParts[0].trim().split('/');
+        if (day && month && year) {
+          const timeParts = dateParts[1] ? dateParts[1].trim().split(':') : ['0', '0', '0'];
+          const hours = parseInt(timeParts[0] || '0', 10);
+          const minutes = parseInt(timeParts[1] || '0', 10);
+          const seconds = parseInt(timeParts[2] || '0', 10);
+          return new Date(parseInt(year), parseInt(month) - 1, parseInt(day), hours, minutes, seconds);
+        }
+      }
+      const standardDate = new Date(dateString);
+      if (!isNaN(standardDate.getTime())) {
+        return standardDate;
+      }
+      return new Date(0); 
+    };
 
-  // Ordena a cópia
-  dataCopy.sort((a, b) => {
-    const dateA = parseDate(a.date);
-    const dateB = parseDate(b.date);
+    dataCopy.sort((a, b) => {
+      const dateA = parseUniversalDate(a.date);
+      const dateB = parseUniversalDate(b.date);
+      return dateB.getTime() - dateA.getTime();
+    });
 
-    // LÓGICA DE ORDENAÇÃO CORRIGIDA:
-    // Subtrai o tempo de B pelo de A.
-    // Se B for mais recente, o resultado é positivo, colocando B antes de A.
-    return dateB.getTime() - dateA.getTime();
-  });
-
-  return dataCopy;
-}, [data]);
+    return dataCopy;
+  }, [data]);
 
   const uniqueUsers = useMemo(() => {
     if (!data.length) return 0;
@@ -144,7 +138,6 @@ const sortedData = useMemo(() => {
     const counts: { [ddd: string]: number } = {};
     data.forEach(item => {
       const clean = item.number.replace(/\D/g, ''); 
-      
       if (clean.length >= 4) {
         const ddd = clean.slice(2, 4);
         counts[ddd] = (counts[ddd] || 0) + 1;
@@ -154,10 +147,10 @@ const sortedData = useMemo(() => {
     return Object.entries(counts)
       .map(([ddd, count]) => ({ ddd: `(${ddd})`, count }))
       .sort((a, b) => b.count - a.count);
-}, [data]);
+  }, [data]);
 
   const handleLogout = () => {
-    signOut(auth).catch(error => console.error("Erro ao fazer logout: ", error));
+    signOut(auth).catch(error => {});
   };
 
   if (loadingData || loadingAuth) return <p className="loading-message">Carregando dashboard...</p>;
